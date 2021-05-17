@@ -134,7 +134,7 @@ class SettingsController extends CpController
                       'icon' => "text",
                       'width' => 100,
                       'listable' => "hidden",
-                      'validate' => ['required']
+                      'validate' => ['required', 'url']
                     ],
                   ],
                   'events' => [
