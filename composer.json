@@ -1,19 +1,32 @@
 {
-    "name": "legrisch/statamic-webhooks",
-    "autoload": {
-        "psr-4": {
-            "Legrisch\\StatamicWebhooks\\": "src"
-        }
-    },
-    "extra": {
-        "statamic": {
-            "name": "Statamic Webhooks",
-            "description": "Statamic Webhooks addon"
-        },
-        "laravel": {
-            "providers": [
-                "Legrisch\\StatamicWebhooks\\ServiceProvider"
-            ]
-        }
+  "name": "legrisch/statamic-webhooks",
+  "description": "A Statamic addon to register webhooks for Statamic events.",
+  "type": "statamic-addon",
+  "autoload": {
+    "psr-4": {
+      "Legrisch\\StatamicWebhooks\\": "src"
     }
+  },
+  "require": {
+    "php": "^7.3 || ^8.0",
+    "statamic/cms": "^3.1"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Grischa Erbe",
+      "email": "grischa.erbe@googlemail.com"
+    }
+  ],
+  "extra": {
+    "statamic": {
+      "name": "Statamic Webhooks",
+      "description": "A Statamic addon to register webhooks for Statamic events."
+    },
+    "laravel": {
+      "providers": [
+        "Legrisch\\StatamicWebhooks\\ServiceProvider"
+      ]
+    }
+  }
 }
