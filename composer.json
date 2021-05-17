@@ -1,0 +1,19 @@
+{
+    "name": "legrisch/statamic-webhooks",
+    "autoload": {
+        "psr-4": {
+            "Legrisch\\StatamicWebhooks\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Statamic Webhooks",
+            "description": "Statamic Webhooks addon"
+        },
+        "laravel": {
+            "providers": [
+                "Legrisch\\StatamicWebhooks\\ServiceProvider"
+            ]
+        }
+    }
+}
