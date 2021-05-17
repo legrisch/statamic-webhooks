@@ -4,6 +4,7 @@ namespace Legrisch\StatamicWebhooks\EventListener;
 
 use Legrisch\StatamicWebhooks\Settings\Settings;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class EventListener
 {
@@ -30,8 +31,13 @@ class EventListener
   {
     $eventClass = get_class($event);
     foreach (self::webhooks() as $webhook) {
-      if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
-        self::trigger($webhook, $event);
+      try {
+        if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
+          self::trigger($webhook, $event);
+        }
+      } catch (\Throwable $th) {
+        Log::error('Unable to handle webhook: ' . $th->getMessage());
+        throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
       }
     }
   }
