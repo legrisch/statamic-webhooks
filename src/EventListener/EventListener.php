@@ -4,6 +4,7 @@ namespace Legrisch\StatamicWebhooks\EventListener;
 
 use Legrisch\StatamicWebhooks\Settings\Settings;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Log;
 
 class EventListener
@@ -30,19 +31,24 @@ class EventListener
   public static function handle($event)
   {
     $eventClass = get_class($event);
-    foreach (self::webhooks() as $webhook) {
-      try {
-        if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
-          self::trigger($webhook, $event);
+    Http::pool(function (Pool $pool) use ($eventClass, $event) {
+      $requests = [];
+      foreach (self::webhooks() as $webhook) {
+        try {
+          if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
+            $request = self::trigger($webhook, $event, $pool);
+            array_push($requests, $request);
+          }
+        } catch (\Throwable $th) {
+          Log::error('Unable to handle webhook: ' . $th->getMessage());
+          throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
         }
-      } catch (\Throwable $th) {
-        Log::error('Unable to handle webhook: ' . $th->getMessage());
-        throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
       }
-    }
+      return $requests;
+    });
   }
 
-  public static function trigger($webhook, $event)
+  public static function trigger($webhook, $event, Pool $pool)
   {
     if (isset($webhook['headers']) && count($webhook['headers']) > 0) {
       $header = [];
@@ -52,11 +58,11 @@ class EventListener
         }
       }
 
-      Http::withHeaders($header)->post($webhook['url'], [
+      return $pool->withHeaders($header)->post($webhook['url'], [
         'event' => str_replace('Statamic\\Events\\', '', get_class($event))
       ]);
     } else {
-      Http::post($webhook['url'], [
+      return $pool->post($webhook['url'], [
         'event' => str_replace('Statamic\\Events\\', '', get_class($event))
       ]);
     }
