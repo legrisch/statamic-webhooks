@@ -2,7 +2,7 @@
 
 This Statamic addon provides an easy to use interface to register webhooks for certain Statamic Events. Trigger deployments or microservices with ease.
 
-![Statamic Webhooks](https://user-images.githubusercontent.com/46897060/118627607-2a8c9600-b7cc-11eb-8254-9e4a4d384d47.png)
+![Statamic Webhooks](https://user-images.githubusercontent.com/46897060/118682352-a6a0d100-b800-11eb-99b5-9967abf11f77.png)
 
 ## Features
 
@@ -18,7 +18,7 @@ Run `composer require legrisch/statamic-webhooks`
 
 ## Usage
 
-After installation, visit the control panel to add webhooks.
+After installation, visit the control panel to add webhooks: `Tools` → `Webhooks`.
 
 ---
 

@@ -153,11 +153,14 @@ class SettingsController extends CpController
                   'events' => [
                     'handle' => 'events',
                     'field' => [
-                      'type' => 'checkboxes',
+                      'type' => 'select',
                       'display' => __('statamic-webhooks::general.events_display'),
                       'instructions' => __('statamic-webhooks::general.events_instructions'),
                       'options' => $events,
-                      'validate' => ['required']
+                      'validate' => ['required'],
+                      'multiple' => true,
+                      'placeholder' => __('statamic-webhooks::general.events_placeholder'),
+                      'taggable' => true,
                     ]
                   ],
                   'headers' => [
