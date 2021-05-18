@@ -119,6 +119,7 @@ class SettingsController extends CpController
         'fields' => [
           'webhooks' => [
             'type' => 'replicator',
+            'collapse' => true,
             'display' => 'Webhooks',
             'sets' => [
               'webhook' => [
@@ -147,11 +148,11 @@ class SettingsController extends CpController
                       'validate' => ['required']
                     ]
                   ],
-                  'header' => [
-                    'handle' => 'header',
+                  'headers' => [
+                    'handle' => 'headers',
                     'field' => [
                       'type' => 'replicator',
-                      'display' => __('statamic-webhooks::general.header_display'),
+                      'display' => __('statamic-webhooks::general.headers_display'),
                       'sets' => [
                         'header' => [
                           'display' => __('statamic-webhooks::general.header_set_display'),

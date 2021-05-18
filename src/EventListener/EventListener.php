@@ -50,21 +50,18 @@ class EventListener
 
   public static function trigger($webhook, $event, Pool $pool)
   {
-    if (isset($webhook['headers']) && count($webhook['headers']) > 0) {
-      $header = [];
-      foreach ($webhook['header'] as $h) {
-        if ($h && $h['enabled']) {
-          $header[$h['key']] = $h['value'];
-        }
-      }
+    $headers = [
+      'Content-Type' => 'application/json'
+    ];
 
-      return $pool->withHeaders($header)->post($webhook['url'], [
-        'event' => str_replace('Statamic\\Events\\', '', get_class($event))
-      ]);
-    } else {
-      return $pool->post($webhook['url'], [
-        'event' => str_replace('Statamic\\Events\\', '', get_class($event))
-      ]);
+    if (isset($webhook['headers']) && count($webhook['headers']) > 0) {
+      foreach ($webhook['headers'] as $header) {
+        $headers[$header['key']] = $header['value'];
+      }
     }
+
+    return $pool->withHeaders($headers)->post($webhook['url'], [
+      'event' => str_replace('Statamic\\Events\\', '', get_class($event))
+    ]);
   }
 }
