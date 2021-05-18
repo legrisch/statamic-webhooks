@@ -18,4 +18,6 @@
             :values='@json($values)'
         />
     </div>
+
+    <p class="text-xs" style="color: #737f8c">With ❤️ by <a href="http://legrisch.com/" alt="le grisch">le grisch</a></p>
 @stop
