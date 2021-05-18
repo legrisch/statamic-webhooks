@@ -31,37 +31,61 @@ class EventListener
   public static function handle($event)
   {
     $eventClass = get_class($event);
-    Http::pool(function (Pool $pool) use ($eventClass, $event) {
-      $requests = [];
-      foreach (self::webhooks() as $webhook) {
-        try {
-          if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
-            $request = self::trigger($webhook, $event, $pool);
-            array_push($requests, $request);
-          }
-        } catch (\Throwable $th) {
-          Log::error('Unable to handle webhook: ' . $th->getMessage());
-          throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
+    $curls = [];
+    foreach (self::webhooks() as $webhook) {
+      try {
+        if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
+          $curl = self::trigger($webhook, $event);
+          array_push($curls, $curl);
         }
-      }
-      return $requests;
-    });
-  }
-
-  public static function trigger($webhook, $event, Pool $pool)
-  {
-    $headers = [
-      'Content-Type' => 'application/json'
-    ];
-
-    if (isset($webhook['headers']) && count($webhook['headers']) > 0) {
-      foreach ($webhook['headers'] as $header) {
-        $headers[$header['key']] = $header['value'];
+      } catch (\Throwable $th) {
+        Log::error('Unable to handle webhook: ' . $th->getMessage());
+        throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
       }
     }
 
-    return $pool->withHeaders($headers)->post($webhook['url'], [
-      'event' => str_replace('Statamic\\Events\\', '', get_class($event))
-    ]);
+    $multiCurl = curl_multi_init();
+    foreach ($curls as $curl) {
+      curl_multi_add_handle($multiCurl, $curl);
+    }
+
+    do {
+      $status = curl_multi_exec($multiCurl, $active);
+      if ($active) {
+        curl_multi_select($multiCurl);
+      }
+    } while ($active && $status == CURLM_OK);
+
+    foreach ($curls as $curl) {
+      curl_multi_remove_handle($multiCurl, $curl);
+    }
+    curl_multi_close($multiCurl);
+  }
+
+  public static function trigger($webhook, $event)
+  {
+    $curl = curl_init($webhook['url']);
+    $headers = array(
+      'Content-Type:application/json',
+    );
+
+    if (isset($webhook['headers']) && count($webhook['headers']) > 0) {
+      foreach ($webhook['headers'] as $header) {
+        array_push($headers, "{$header['key']}: {$header['value']}");
+      }
+    }
+
+    $includePayload = $webhook['include_payload'] ?? false;
+    if ($includePayload) {
+      curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
+        'event' => str_replace('Statamic\\Events\\', '', get_class($event))
+      ]));
+    }
+
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    return $curl;
   }
 }
