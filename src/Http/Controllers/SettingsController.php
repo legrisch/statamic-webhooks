@@ -61,7 +61,7 @@ class SettingsController extends CpController
     Settings::write($values->toArray());
 
     if (Config::get('statamic.git.enabled', false)) {
-      Git::commit(__('statamic-webhooks::general.git-commit-message'));
+      Git::commit(__('statamic-webhooks::general.git_commit_message'));
     }
   }
 

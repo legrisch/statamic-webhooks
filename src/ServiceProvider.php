@@ -52,7 +52,7 @@ use Statamic\Events\UserSaved;
 
 class EntryPolicy
 {
-  public function edit($user, $entry)
+  public function edit($user)
   {
     return $user->hasPermission("manage webhooks");
   }
@@ -108,13 +108,6 @@ class ServiceProvider extends AddonServiceProvider
     UserGroupSaved::class => [EventListener\EventListener::class],
     UserSaved::class => [EventListener\EventListener::class],
   ];
-
-  public function __call($action, $event)
-  {
-    list($type, $action) = explode('.', $action);
-
-    $this->invoke($type, $action, $event);
-  }
 
   public function boot()
   {
