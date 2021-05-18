@@ -19,5 +19,5 @@
         />
     </div>
 
-    <p class="text-xs" style="color: #737f8c">With ❤️ by <a href="http://legrisch.com/" alt="le grisch">le grisch</a></p>
+    <p class="text-xs" style="color: #737f8c">Made with ❤️ by <a href="http://legrisch.com/" alt="le grisch">le grisch</a></p>
 @stop
