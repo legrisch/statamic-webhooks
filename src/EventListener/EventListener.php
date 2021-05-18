@@ -28,36 +28,37 @@ class EventListener
 
   public static function handle($event)
   {
-    $eventClass = get_class($event);
-    $curls = [];
-    foreach (self::webhooks() as $webhook) {
-      try {
+    try {
+      $eventClass = get_class($event);
+      $curls = [];
+      foreach (self::webhooks() as $webhook) {
+
         if ($webhook['events'] && in_array($eventClass, $webhook['events'])) {
           $curl = self::trigger($webhook, $event);
           array_push($curls, $curl);
         }
-      } catch (\Throwable $th) {
-        Log::error('Unable to handle webhook: ' . $th->getMessage());
-        throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
       }
-    }
 
-    $multiCurl = curl_multi_init();
-    foreach ($curls as $curl) {
-      curl_multi_add_handle($multiCurl, $curl);
-    }
-
-    do {
-      $status = curl_multi_exec($multiCurl, $active);
-      if ($active) {
-        curl_multi_select($multiCurl);
+      $multiCurl = curl_multi_init();
+      foreach ($curls as $curl) {
+        curl_multi_add_handle($multiCurl, $curl);
       }
-    } while ($active && $status == CURLM_OK);
 
-    foreach ($curls as $curl) {
-      curl_multi_remove_handle($multiCurl, $curl);
+      do {
+        $status = curl_multi_exec($multiCurl, $active);
+        if ($active) {
+          curl_multi_select($multiCurl);
+        }
+      } while ($active && $status == CURLM_OK);
+
+      foreach ($curls as $curl) {
+        curl_multi_remove_handle($multiCurl, $curl);
+      }
+      curl_multi_close($multiCurl);
+    } catch (\Throwable $th) {
+      Log::error('Unable to handle webhook: ' . $th->getMessage());
+      throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
     }
-    curl_multi_close($multiCurl);
   }
 
   public static function trigger($webhook, $event)
