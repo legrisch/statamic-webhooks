@@ -138,6 +138,18 @@ class SettingsController extends CpController
                       'validate' => ['required', 'url']
                     ],
                   ],
+                  'include_payload' => [
+                    'handle' => 'include_payload',
+                    'field' => [
+                      'type' => 'toggle',
+                      'default' => true,
+                      'display' => __('statamic-webhooks::general.include_payload_display'),
+                      'instructions' => __('statamic-webhooks::general.include_payload_instructions'),
+                      'width' => 100,
+                      'listable' => "hidden",
+                      'validate' => ['required']
+                    ],
+                  ],
                   'events' => [
                     'handle' => 'events',
                     'field' => [
