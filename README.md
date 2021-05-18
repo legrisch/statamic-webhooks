@@ -6,7 +6,11 @@ This Statamic addon provides an easy to use interface to register webhooks for c
 
 ## Features
 
-- Use custom headers to handle authentication
+- Easy to use interface
+- Custom headers per webhook
+- Choose to include payload
+- Quickly enable/disable webhooks and headers
+- Efficient concurrent execution of POST requests
 
 ## Installation
 
