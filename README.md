@@ -11,10 +11,13 @@ This Statamic addon provides an easy to use interface to register webhooks for c
 - Choose to include payload
 - Quickly enable/disable webhooks and headers
 - Efficient concurrent execution of POST requests
+- Debounced webhooks (when using an async queue driver)
 
 ## Installation
 
 Run `composer require legrisch/statamic-webhooks`
+
+In case you want to debounce the webhooks, make sure to setup an [async queue driver](https://laravel.com/docs/5.0/queues).
 
 ## Usage
 
