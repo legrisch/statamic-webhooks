@@ -138,6 +138,34 @@ class SettingsController extends CpController
                       'validate' => ['required', 'url']
                     ],
                   ],
+                  'debounced' => [
+                    'handle' => 'debounced',
+                    'field' => [
+                      'type' => 'toggle',
+                      'default' => false,
+                      'display' => __('statamic-webhooks::general.debounced'),
+                      'instructions' => __('statamic-webhooks::general.debounced_instructions'),
+                      'width' => 50,
+                      'listable' => "hidden",
+                      'validate' => ['required']
+                    ]
+                  ],
+                  'debounce_in_seconds' => [
+                    'handle' => 'debounce_in_seconds',
+                    'field' => [
+                      'type' => 'float',
+                      'default' => 0,
+                      'icon' => 'float',
+                      'display' => __('statamic-webhooks::general.debounce_in_seconds'),
+                      // 'instructions' => __('statamic-webhooks::general.debounce_in_seconds_instructions'),
+                      'width' => 50,
+                      'listable' => "hidden",
+                      'validate' => ['required_if:debounced,true'],
+                      'if' => [
+                        'debounced' => 'equals true'
+                      ]
+                    ]
+                  ],
                   'include_payload' => [
                     'handle' => 'include_payload',
                     'field' => [
