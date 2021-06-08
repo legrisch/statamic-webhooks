@@ -31,6 +31,7 @@ class EventListener
   {
     try {
       $key = array_search($webhookName, array_column(self::webhooks(), 'name'));
+      if ($key === false) throw new \Exception('Webhook not found', 1);
       $webhook = self::webhooks()[$key];
       $curl = self::trigger($webhook);
 
@@ -38,11 +39,14 @@ class EventListener
       curl_close($curl);
     } catch (\Throwable $th) {
       Log::error('Unable to handle webhook: ' . $th->getMessage());
-      throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
-      return false;
+      return [
+        'success' => false,
+        'message' => $th->getMessage(),
+      ];
     }
-
-    return true;
+    return [
+      'success' => true,
+    ];
   }
 
   public static function handle($event)
