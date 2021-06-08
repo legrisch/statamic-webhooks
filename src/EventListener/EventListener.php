@@ -6,16 +6,6 @@ use Legrisch\StatamicWebhooks\Settings\Settings;
 use Illuminate\Support\Facades\Log;
 use Mpbarlow\LaravelQueueDebouncer\Facade\Debouncer;
 
-class MyJob
-{
-  use \Illuminate\Foundation\Bus\Dispatchable;
-
-  public function handle()
-  {
-    Log::info('handled MyJob!');
-  }
-}
-
 class EventListener
 {
   public static $settings;
@@ -35,6 +25,24 @@ class EventListener
       return (bool) $enabled;
     }));
     return $enabledWebhooks;
+  }
+
+  public static function triggerByWebhookName(string $webhookName)
+  {
+    try {
+      $key = array_search($webhookName, array_column(self::webhooks(), 'name'));
+      $webhook = self::webhooks()[$key];
+      $curl = self::trigger($webhook);
+
+      curl_exec($curl);
+      curl_close($curl);
+    } catch (\Throwable $th) {
+      Log::error('Unable to handle webhook: ' . $th->getMessage());
+      throw new \Exception('Unable to handle webhook: ' . $th->getMessage(), 1);
+      return false;
+    }
+
+    return true;
   }
 
   public static function handle($event)
@@ -82,7 +90,7 @@ class EventListener
     }
   }
 
-  public static function setupCurl($webhook, $event)
+  private static function setupCurl($webhook, $event = null)
   {
     $curl = curl_init($webhook['url']);
     $headers = array(
@@ -96,7 +104,7 @@ class EventListener
     }
 
     $includePayload = $webhook['include_payload'] ?? false;
-    if ($includePayload) {
+    if ($includePayload && $event) {
       curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
         'event' => str_replace('Statamic\\Events\\', '', get_class($event))
       ]));
@@ -109,7 +117,7 @@ class EventListener
     return $curl;
   }
 
-  public static function triggerDebounced($webhook, $event)
+  private static function triggerDebounced($webhook, $event = null)
   {
     try {
       $curl = self::setupCurl($webhook, $event);
@@ -121,7 +129,7 @@ class EventListener
     }
   }
 
-  public static function trigger($webhook, $event)
+  private static function trigger($webhook, $event = null)
   {
     $curl = self::setupCurl($webhook, $event);
     return $curl;

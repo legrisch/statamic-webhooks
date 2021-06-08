@@ -125,6 +125,19 @@ class SettingsController extends CpController
               'webhook' => [
                 'display' => 'Webhook',
                 'fields' => [
+                  'name' => [
+                    'handle' => 'name',
+                    'field' => [
+                      'input_type' => 'text',
+                      'antlers' => false,
+                      'display' => "Name",
+                      'type' => "text",
+                      'icon' => "text",
+                      'width' => 100,
+                      'listable' => "visible",
+                      'validate' => ['required', 'alphadash']
+                    ],
+                  ],
                   'url' => [
                     'handle' => 'url',
                     'field' => [

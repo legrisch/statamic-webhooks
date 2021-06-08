@@ -23,6 +23,10 @@ In case you want to debounce the webhooks, make sure to setup an [async queue dr
 
 After installation, visit the control panel to add webhooks: `Tools` → `Webhooks`.
 
+To manually trigger a webhook call it like this:
+`$success = EventListener::triggerByWebhookName('webhook-name')`
+If called directly, debouncing is not considered.
+
 ---
 
 ## License

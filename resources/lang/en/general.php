@@ -9,7 +9,7 @@ return [
   'include_payload_display' => 'Include Event Data',
   'include_payload_instructions' => 'Include event data in POST request.',
 
-  'debounced' => 'Debounce the Webhook',
+  'debounced' => 'Debounced',
   'debounced_instructions' => 'Debounce the webhook to only call it once in a specific timeframe.',
 
   'debounce_in_seconds' => 'Timeframe in seconds',
