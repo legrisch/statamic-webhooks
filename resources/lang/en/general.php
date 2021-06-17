@@ -18,5 +18,8 @@ return [
   'headers_display' => 'Request Headers',
   'header_set_display' => 'Header',
   'header_set_key' => 'Key',
-  'header_set_value' => 'Value'
+  'header_set_value' => 'Value',
+
+  'request_body_display' => 'Request Body',
+  'request_body_instructions' => 'Provide a custom request body in JSON format. If a value is set, the body of the request is overriden.'
 ];

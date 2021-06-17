@@ -243,7 +243,15 @@ class SettingsController extends CpController
                         ]
                       ]
                     ]
-                  ]
+                  ],
+                  'request_body' => [
+                    'handle' => 'request_body',
+                    'field' => [
+                      'type' => 'textarea',
+                      'display' => __('statamic-webhooks::general.request_body_display'),
+                      'instructions' => __('statamic-webhooks::general.request_body_instructions'),
+                    ]
+                  ],
                 ]
               ]
             ]

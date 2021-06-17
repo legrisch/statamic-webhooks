@@ -94,6 +94,12 @@ class EventListener
     }
   }
 
+  private static function isJson($string)
+  {
+    json_decode($string);
+    return json_last_error() === JSON_ERROR_NONE;
+  }
+
   private static function setupCurl($webhook, $event = null)
   {
     $curl = curl_init($webhook['url']);
@@ -107,8 +113,15 @@ class EventListener
       }
     }
 
+    $requestBody = $webhook['request_body'] ?? '';
+    $overrideRequestBody = $requestBody !== '';
     $includePayload = $webhook['include_payload'] ?? false;
-    if ($includePayload && $event) {
+    if ($overrideRequestBody) {
+      if (!self::isJson($requestBody)) {
+        throw new \Exception('Invalid JSON provided for request body.', 1);
+      }
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $requestBody);
+    } else if ($includePayload && $event) {
       curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
         'event' => str_replace('Statamic\\Events\\', '', get_class($event))
       ]));
