@@ -31,7 +31,9 @@ class EventListener
   {
     try {
       $key = array_search($webhookName, array_column(self::webhooks(), 'name'));
-      if ($key === false) throw new \Exception('Webhook not found', 1);
+      if ($key === false) {
+        throw new \Exception('Webhook not found', 1);
+      }
       $webhook = self::webhooks()[$key];
       $curl = self::trigger($webhook);
 
@@ -70,7 +72,9 @@ class EventListener
         }
       }
 
-      if (count($curls) < 1) return;
+      if (count($curls) < 1) {
+        return;
+      }
 
       $multiCurl = curl_multi_init();
       foreach ($curls as $curl) {

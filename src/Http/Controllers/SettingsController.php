@@ -35,8 +35,8 @@ class SettingsController extends CpController
 
     return view('statamic-webhooks::settings', [
       'blueprint' => $blueprint->toPublishArray(),
-      'values'    => $fields->values(),
-      'meta'      => $fields->meta(),
+      'values' => $fields->values(),
+      'meta' => $fields->meta(),
     ]);
   }
 
