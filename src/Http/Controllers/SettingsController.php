@@ -114,149 +114,145 @@ class SettingsController extends CpController
     ];
 
 
-    return Blueprint::makeFromSections([
+    return Blueprint::makeFromFields([
       'webhooks' => [
-        'fields' => [
-          'webhooks' => [
-            'type' => 'replicator',
-            'collapse' => true,
-            'display' => 'Webhooks',
-            'sets' => [
-              'webhook' => [
-                'display' => 'Webhook',
-                'fields' => [
-                  'name' => [
-                    'handle' => 'name',
-                    'field' => [
-                      'input_type' => 'text',
-                      'antlers' => false,
-                      'display' => "Name",
-                      'type' => "text",
-                      'icon' => "text",
-                      'width' => 100,
-                      'listable' => "visible",
-                      'validate' => ['required', 'alphadash']
-                    ],
-                  ],
-                  'url' => [
-                    'handle' => 'url',
-                    'field' => [
-                      'input_type' => 'text',
-                      'antlers' => false,
-                      'display' => "Url",
-                      'type' => "text",
-                      'icon' => "text",
-                      'width' => 100,
-                      'listable' => "hidden",
-                      'validate' => ['required', 'url']
-                    ],
-                  ],
-                  'debounced' => [
-                    'handle' => 'debounced',
-                    'field' => [
-                      'type' => 'toggle',
-                      'default' => false,
-                      'display' => __('statamic-webhooks::general.debounced'),
-                      'instructions' => __('statamic-webhooks::general.debounced_instructions'),
-                      'width' => 50,
-                      'listable' => "hidden",
-                      'validate' => ['required']
-                    ]
-                  ],
-                  'debounce_in_seconds' => [
-                    'handle' => 'debounce_in_seconds',
-                    'field' => [
-                      'type' => 'float',
-                      'default' => 0,
-                      'icon' => 'float',
-                      'display' => __('statamic-webhooks::general.debounce_in_seconds'),
-                      // 'instructions' => __('statamic-webhooks::general.debounce_in_seconds_instructions'),
-                      'width' => 50,
-                      'listable' => "hidden",
-                      'validate' => ['required_if:debounced,true'],
-                      'if' => [
-                        'debounced' => 'equals true'
-                      ]
-                    ]
-                  ],
-                  'include_payload' => [
-                    'handle' => 'include_payload',
-                    'field' => [
-                      'type' => 'toggle',
-                      'default' => true,
-                      'display' => __('statamic-webhooks::general.include_payload_display'),
-                      'instructions' => __('statamic-webhooks::general.include_payload_instructions'),
-                      'width' => 100,
-                      'listable' => "hidden",
-                      'validate' => ['required']
-                    ],
-                  ],
-                  'events' => [
-                    'handle' => 'events',
-                    'field' => [
-                      'type' => 'select',
-                      'display' => __('statamic-webhooks::general.events_display'),
-                      'instructions' => __('statamic-webhooks::general.events_instructions'),
-                      'options' => $events,
-                      'validate' => ['required'],
-                      'multiple' => true,
-                      'placeholder' => __('statamic-webhooks::general.events_placeholder'),
-                      'taggable' => true,
-                    ]
-                  ],
-                  'headers' => [
-                    'handle' => 'headers',
-                    'field' => [
-                      'type' => 'replicator',
-                      'display' => __('statamic-webhooks::general.headers_display'),
-                      'sets' => [
-                        'header' => [
-                          'display' => __('statamic-webhooks::general.header_set_display'),
-                          'fields' => [
-                            'key' => [
-                              'handle' => 'key',
-                              'field' => [
-                                'input_type' => 'text',
-                                'antlers' => false,
-                                'display' => __('statamic-webhooks::general.header_set_key'),
-                                'type' => "text",
-                                'icon' => "text",
-                                'width' => 50,
-                                'listable' => "hidden",
-                                'validate' => ['required']
-                              ],
-                            ],
-                            'value' => [
-                              'handle' => 'value',
-                              'field' => [
-                                'input_type' => 'text',
-                                'antlers' => false,
-                                'display' => __('statamic-webhooks::general.header_set_value'),
-                                'type' => "text",
-                                'icon' => "text",
-                                'width' => 50,
-                                'listable' => "hidden",
-                                'validate' => ['required']
-                              ],
-                            ],
-                          ]
-                        ]
-                      ]
-                    ]
-                  ],
-                  'request_body' => [
-                    'handle' => 'request_body',
-                    'field' => [
-                      'type' => 'textarea',
-                      'display' => __('statamic-webhooks::general.request_body_display'),
-                      'instructions' => __('statamic-webhooks::general.request_body_instructions'),
-                    ]
-                  ],
+        'type' => 'replicator',
+        'collapse' => true,
+        'display' => 'Webhooks',
+        'sets' => [
+          'webhook' => [
+            'display' => 'Webhook',
+            'fields' => [
+              'name' => [
+                'handle' => 'name',
+                'field' => [
+                  'input_type' => 'text',
+                  'antlers' => false,
+                  'display' => "Name",
+                  'type' => "text",
+                  'icon' => "text",
+                  'width' => 100,
+                  'listable' => "visible",
+                  'validate' => ['required', 'alphadash']
+                ],
+              ],
+              'url' => [
+                'handle' => 'url',
+                'field' => [
+                  'input_type' => 'text',
+                  'antlers' => false,
+                  'display' => "Url",
+                  'type' => "text",
+                  'icon' => "text",
+                  'width' => 100,
+                  'listable' => "hidden",
+                  'validate' => ['required', 'url']
+                ],
+              ],
+              'debounced' => [
+                'handle' => 'debounced',
+                'field' => [
+                  'type' => 'toggle',
+                  'default' => false,
+                  'display' => __('statamic-webhooks::general.debounced'),
+                  'instructions' => __('statamic-webhooks::general.debounced_instructions'),
+                  'width' => 50,
+                  'listable' => "hidden",
+                  'validate' => ['required']
                 ]
-              ]
+              ],
+              'debounce_in_seconds' => [
+                'handle' => 'debounce_in_seconds',
+                'field' => [
+                  'type' => 'float',
+                  'default' => 0,
+                  'icon' => 'float',
+                  'display' => __('statamic-webhooks::general.debounce_in_seconds'),
+                  // 'instructions' => __('statamic-webhooks::general.debounce_in_seconds_instructions'),
+                  'width' => 50,
+                  'listable' => "hidden",
+                  'validate' => ['required_if:debounced,true'],
+                  'if' => [
+                    'debounced' => 'equals true'
+                  ]
+                ]
+              ],
+              'include_payload' => [
+                'handle' => 'include_payload',
+                'field' => [
+                  'type' => 'toggle',
+                  'default' => true,
+                  'display' => __('statamic-webhooks::general.include_payload_display'),
+                  'instructions' => __('statamic-webhooks::general.include_payload_instructions'),
+                  'width' => 100,
+                  'listable' => "hidden",
+                  'validate' => ['required']
+                ],
+              ],
+              'events' => [
+                'handle' => 'events',
+                'field' => [
+                  'type' => 'select',
+                  'display' => __('statamic-webhooks::general.events_display'),
+                  'instructions' => __('statamic-webhooks::general.events_instructions'),
+                  'options' => $events,
+                  'validate' => ['required'],
+                  'multiple' => true,
+                  'placeholder' => __('statamic-webhooks::general.events_placeholder'),
+                  'taggable' => true,
+                ]
+              ],
+              'headers' => [
+                'handle' => 'headers',
+                'field' => [
+                  'type' => 'replicator',
+                  'display' => __('statamic-webhooks::general.headers_display'),
+                  'sets' => [
+                    'header' => [
+                      'display' => __('statamic-webhooks::general.header_set_display'),
+                      'fields' => [
+                        'key' => [
+                          'handle' => 'key',
+                          'field' => [
+                            'input_type' => 'text',
+                            'antlers' => false,
+                            'display' => __('statamic-webhooks::general.header_set_key'),
+                            'type' => "text",
+                            'icon' => "text",
+                            'width' => 50,
+                            'listable' => "hidden",
+                            'validate' => ['required']
+                          ],
+                        ],
+                        'value' => [
+                          'handle' => 'value',
+                          'field' => [
+                            'input_type' => 'text',
+                            'antlers' => false,
+                            'display' => __('statamic-webhooks::general.header_set_value'),
+                            'type' => "text",
+                            'icon' => "text",
+                            'width' => 50,
+                            'listable' => "hidden",
+                            'validate' => ['required']
+                          ],
+                        ],
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              'request_body' => [
+                'handle' => 'request_body',
+                'field' => [
+                  'type' => 'textarea',
+                  'display' => __('statamic-webhooks::general.request_body_display'),
+                  'instructions' => __('statamic-webhooks::general.request_body_instructions'),
+                ]
+              ],
             ]
-          ],
-        ],
+          ]
+        ]
       ],
     ]);
   }
